@@ -60,4 +60,9 @@ void rmoveItem(String productId){
   notifyListeners();
 }
 
+  void clearCart(){
+    _items = {};
+    notifyListeners();
+  }
+
 }
