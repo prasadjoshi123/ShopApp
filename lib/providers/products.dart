@@ -82,21 +82,21 @@ class Products with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addProducts(Product product) {
+  Future<void> addProducts(Product product) async {
     const url = 'https://shoapapp-8a869.firebaseio.com/products.json';
 
-    return http
-        .post(
-      url,
-      body: jsonEncode({
-        'title': product.title,
-        'description': product.description,
-        'price': product.price,
-        'imageUrl': product.imageUrl,
-        'isFavorite': product.isFavorite
-      }),
-    )
-        .then((response) {
+    try {
+      final response = await http.post(
+        url,
+        body: jsonEncode({
+          'title': product.title,
+          'description': product.description,
+          'price': product.price,
+          'imageUrl': product.imageUrl,
+          'isFavorite': product.isFavorite
+        }),
+      );
+
       final newProduct = Product(
         id: json.decode(response.body)['name'],
         title: product.title,
@@ -107,8 +107,8 @@ class Products with ChangeNotifier {
       _items.add(newProduct);
       //_items.insert(0, newProduct); // alternative to add product at first place
       notifyListeners();
-    }).catchError((error){
+    } catch (error) {
       throw error;
-    });
+    }
   }
 }
