@@ -92,7 +92,7 @@ class Products with ChangeNotifier {
     final url = 'https://shoapapp-8a869.firebaseio.com/products/$id/.json';
     final existingProdIndex = _items.indexWhere((prod) => prod.id == id);
     var existingProduct = _items[existingProdIndex];
-    
+
     _items.removeAt(existingProdIndex);
     notifyListeners();
 
@@ -112,6 +112,10 @@ class Products with ChangeNotifier {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<Product> loadedProducts = [];
+      if (null == extractedData) {
+        return;
+      }
+
       extractedData.forEach((prodId, prodData) {
         loadedProducts.add(
           Product(
