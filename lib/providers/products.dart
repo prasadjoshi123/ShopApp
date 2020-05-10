@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import './product.dart';
 
@@ -74,17 +77,36 @@ class Products with ChangeNotifier {
     print('...');
   }
 
-  void addProducts(Product product) {
-    final newProduct = Product(
-      id: DateTime.now().toString(),
-      title: product.title,
-      description: product.description,
-      price: product.price,
-      imageUrl: product.imageUrl,
-    );
-    _items.add(newProduct);
-    //_items.insert(0, newProduct); // alternative to add product at first place
-    //_items.add(value);
+  void deleteProduct(String id) {
+    final productId = _items.removeWhere((prod) => prod.id == id);
     notifyListeners();
+  }
+
+  Future<void> addProducts(Product product) {
+    const url = 'https://shoapapp-8a869.firebaseio.com/products.json';
+
+    return http
+        .post(
+      url,
+      body: jsonEncode({
+        'title': product.title,
+        'description': product.description,
+        'price': product.price,
+        'imageUrl': product.imageUrl,
+        'isFavorite': product.isFavorite
+      }),
+    )
+        .then((response) {
+      final newProduct = Product(
+        id: json.decode(response.body)['name'],
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+      );
+      _items.add(newProduct);
+      //_items.insert(0, newProduct); // alternative to add product at first place
+      notifyListeners();
+    });
   }
 }
