@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import './product.dart';
 
-class Products with ChangeNotifier{
- List<Product> _items = [
+class Products with ChangeNotifier {
+  List<Product> _items = [
     Product(
       id: 'p1',
       title: 'Red Shirt',
@@ -35,22 +35,23 @@ class Products with ChangeNotifier{
       price: 49.99,
       imageUrl:
           'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
-    ),];
+    ),
+  ];
 
 //var _showFavoriteOnly = false;
 
- List<Product> get items{
-  //  if(_showFavoriteOnly){
-  //    return _items.where((prodItem) => prodItem.isFavorite).toList();
-  //  }
-   return [..._items];
- }
+  List<Product> get items {
+    //  if(_showFavoriteOnly){
+    //    return _items.where((prodItem) => prodItem.isFavorite).toList();
+    //  }
+    return [..._items];
+  }
 
-  Product findById(String id){
+  Product findById(String id) {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  List<Product> get favoriteItems{
+  List<Product> get favoriteItems {
     return _items.where((prodItems) => prodItems.isFavorite).toList();
   }
 
@@ -64,9 +65,26 @@ class Products with ChangeNotifier{
   //   notifyListeners();
   // }
 
-  void addProducts(){
+  void updateProduct(String id, Product newProduct) {
+    final prodIndex = _items.lastIndexWhere((prod) => prod.id == id);
+    if (prodIndex >= 0) {
+      _items[prodIndex] = newProduct;
+      notifyListeners();
+    }
+    print('...');
+  }
+
+  void addProducts(Product product) {
+    final newProduct = Product(
+      id: DateTime.now().toString(),
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      imageUrl: product.imageUrl,
+    );
+    _items.add(newProduct);
+    //_items.insert(0, newProduct); // alternative to add product at first place
     //_items.add(value);
     notifyListeners();
   }
-
 }
