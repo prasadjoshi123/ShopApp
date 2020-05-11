@@ -1,9 +1,9 @@
 import 'dart:math';
-
-import 'package:ShopApp/models/http_exception.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
+import '../models/http_exception.dart';
+import '../screens/product_detail_screen.dart';
 import '../providers/auth.dart';
 
 enum AuthMode { Signup, Login }
@@ -136,6 +136,7 @@ class _AuthCardState extends State<AuthCard> {
         await Provider.of<Auth>(context, listen: false)
             .signup(_authData['email'], _authData['password']);
       }
+      Navigator.of(context).pushReplacementNamed(ProductDetailScreen.routeName);
     } on HttpException catch (error) {
       var errorMessage = 'Authenticate failed';
       if (error.toString().contains('EMAIL_EXISTS')) {
