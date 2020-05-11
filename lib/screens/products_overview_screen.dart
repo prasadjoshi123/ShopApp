@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:connectivity/connectivity.dart';
 
 import '../widgets/products_grid.dart';
 import '../widgets/app_drawer.dart';
@@ -32,6 +33,24 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
     super.initState();
   }
 
+//  Widget _buildShowDialog(BuildContext context, String title, String text) {
+//       showDialog(
+//           context: context,
+//           builder: (context) => AlertDialog(
+//                 title: Text(title),
+//                 content: Text(text),
+//                 actions: [
+//                   FlatButton(
+//                     onPressed: () {
+//                       Navigator.of(context).pop();
+//                     },
+//                     child: Text('Ok'),
+//                   ),
+//                 ],
+//               ));
+//     }
+
+  
   @override
   void didChangeDependencies() {
     if (_isInit) {
@@ -69,6 +88,13 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   @override
   Widget build(BuildContext context) {
     //final productsContainer  = Provider.of<Products>(context, listen: false);
+    // Widget _checkInternetConnectivity() async {
+    // var result = await Connectivity().checkConnectivity();
+    // if (result == ConnectivityResult.none) {
+    //  return  _buildShowDialog(context, 'No Internet', 'You are not connected to internet');
+    //   }
+    // }
+ 
     return Scaffold(
       appBar: AppBar(
         title: Text('My Shop App'),
@@ -114,7 +140,9 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         ],
       ),
       drawer: AppDrawer(),
-      body: _isLoading
+      body:
+      // _checkInternetConnectivity
+       _isLoading
           ? Center(
               child: CircularProgressIndicator(),
             )
