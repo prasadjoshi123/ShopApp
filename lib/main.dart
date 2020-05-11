@@ -24,14 +24,20 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: Auth(),
         ),
-        ChangeNotifierProvider(
-          create: (ctx) => Products(),
+        ChangeNotifierProxyProvider<Auth, Products>(
+          update: (ctx, auth, previousProducts) => Products(
+            auth.token,
+            previousProducts == null ? [] : previousProducts.items,
+          ),
         ),
         ChangeNotifierProvider(
           create: (ctx) => Cart(),
         ),
-        ChangeNotifierProvider(
-          create: (ctx) => Orders(),
+        ChangeNotifierProxyProvider<Auth, Orders>(
+          update: (ctx, auth, previousOrders) => Orders(
+            auth.token,
+            previousOrders == null ? [] : previousOrders.orders,
+          ),
         ),
       ],
       child: Consumer<Auth>(
@@ -44,7 +50,7 @@ class MyApp extends StatelessWidget {
           ),
           home: auth.isAuth ? ProductsOverviewScreen() : AuthScreen(),
           routes: {
-             ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
+            ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
             CartScreen.routeName: (ctx) => CartScreen(),
             OrdersScreen.routeName: (ctx) => OrdersScreen(),
             UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
