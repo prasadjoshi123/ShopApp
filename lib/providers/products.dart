@@ -41,8 +41,9 @@ class Products with ChangeNotifier {
     // ),
   ];
   final String authToken;
+  final String userId;
 
-  Products(this.authToken, this._items);
+  Products(this.authToken, this._items, this.userId);
 
 
 //var _showFavoriteOnly = false;
@@ -111,7 +112,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final url = 'https://shoapapp-8a869.firebaseio.com/products.json?auth=$authToken';
+    var url = 'https://shoapapp-8a869.firebaseio.com/products.json?auth=$authToken';
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -120,6 +121,9 @@ class Products with ChangeNotifier {
         return;
       }
 
+      url = 'https://shoapapp-8a869.firebaseio.com/userFavorite/$userId.json?auth=$authToken';
+      final favoriteResponse = await http.get(url); 
+      final favoriteData = json.decode(favoriteResponse.body);
       extractedData.forEach((prodId, prodData) {
         loadedProducts.add(
           Product(
@@ -128,7 +132,7 @@ class Products with ChangeNotifier {
             description: prodData['description'],
             price: prodData['price'],
             imageUrl: prodData['imageUrl'],
-            isFavorite: prodData['isFavorite'],
+            isFavorite: favoriteData == null ? false : favoriteData[prodId] ?? false,
           ),
         );
       });
@@ -151,7 +155,6 @@ class Products with ChangeNotifier {
           'description': product.description,
           'price': product.price,
           'imageUrl': product.imageUrl,
-          'isFavorite': product.isFavorite
         }),
       );
 
