@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
             accentColor: Colors.deepOrange,
             fontFamily: 'Lato',
           ),
-          home: auth.isAuth
+          home:  auth.isAuth
               ? ProductsOverviewScreen()
               : FutureBuilder(
                   future: auth.tryAutoLogin(),
