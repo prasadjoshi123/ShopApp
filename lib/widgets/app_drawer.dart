@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../screens/orders_screen.dart';
 import '../screens/user_products_screen.dart';
+import '../screens/edit_user_screen.dart';
+
 import '../providers/auth.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -39,6 +41,17 @@ class AppDrawer extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName);
             },
           ),
+                    Divider(),
+          ListTile(
+            leading: Icon(Icons.person),
+            title: Text('User Profile'),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed(EditUserScreen.routeName);
+              //Provider.of<Auth>(context, listen: false).logout();
+            },
+          ),
+
           Divider(),
           ListTile(
             leading: Icon(Icons.exit_to_app),

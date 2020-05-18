@@ -1,3 +1,4 @@
+import 'package:ShopApp/providers/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +11,7 @@ import './screens/edit_product_screen.dart';
 import './screens/auth_screen.dart';
 import './providers/auth.dart';
 import './screens/splashscreen.dart';
+import './screens/edit_user_screen.dart';
 
 import './providers/products.dart';
 import './providers/cart.dart';
@@ -42,12 +44,19 @@ class MyApp extends StatelessWidget {
             previousOrders == null ? [] : previousOrders.orders,
           ),
         ),
+        ChangeNotifierProxyProvider<Auth, UserProfile>(
+          update: (ctx, auth, previousUsers) => UserProfile(
+            auth.token,
+            previousUsers == null ?  User(id: null, firstName: '', address1: '', address2: '', city: '', lastName: '', mobile: '', pincode: '', stateName: '') : previousUsers.getUserd,
+            auth.userId,
+          ),
+        ),
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
           title: 'MyShop',
           theme: ThemeData(
-            primarySwatch: Colors.purple,
+            primarySwatch: Colors.blue,
             accentColor: Colors.deepOrange,
             fontFamily: 'Lato',
           ),
@@ -67,6 +76,7 @@ class MyApp extends StatelessWidget {
             OrdersScreen.routeName: (ctx) => OrdersScreen(),
             UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
             EditProductScreen.routeName: (ctx) => EditProductScreen(),
+            EditUserScreen.routeName: (ctx) => EditUserScreen(),
           },
         ),
       ),

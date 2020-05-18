@@ -13,7 +13,6 @@ class Auth with ChangeNotifier {
   Timer _authTimer;
 
   bool get isAuth {
-    print(token != null);
     return token != null;
   }
 

@@ -1,9 +1,12 @@
+import 'package:ShopApp/screens/edit_user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cart.dart' show Cart;
 import '../widgets/cart_item.dart';
 import '../providers/orders.dart';
+import '../providers/user.dart';
+import '../screens/user_products_screen.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/cart';
@@ -86,6 +89,11 @@ class _OrderButtonState extends State<OrderButton> {
         setState(() {
           _isLoading = true;
         });
+        var currentUser =  Provider.of<UserProfile>(context, listen: false).getUserd;
+        if(!currentUser.pincode.isNotEmpty){
+          Navigator.of(context).pushReplacementNamed(EditUserScreen.routeName);
+        }
+
         await Provider.of<Orders>(context, listen: false).addOrder(
           widget.cart.items.values.toList(),
           widget.cart.totalAmount,
